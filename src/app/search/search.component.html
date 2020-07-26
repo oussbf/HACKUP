@@ -1,0 +1,209 @@
+<div class="mx-auto" style="width: 95%; margin-top: 70px  ">
+  <div class="d-flex" >
+    <div class="d-flex justify-content-start">
+      <button class="btn btn-light" (click)="changeFilter()"><i class="fa fa-times"></i>   Filter & Refine</button><!-- NEED TO ADD OPEN MENU ANIMATION TO THIS -->
+    </div>
+    <div class="d-flex ml-auto">
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button id="ratingSortBtn" type="button" class="btn btn-light" (click)="sortByRating($event)">Rating   <i class="fas fa-sort" [ngClass]="{'fa-sort-down': sortedByRating , 'fa-sort-up': !sortedByRating}"></i></button>
+        <button id="ExperienceSortBtn" type="button" class="btn btn-light" (click)="sortByExperience($event)">Starting Date   <i class="fas fa-sort" [ngClass]="{'fa-sort-down': sortedByExperience , 'fa-sort-up': !sortedByExperience}"></i></button>
+        <button id="dateSortBtn" type="button" class="btn btn-light" (click)="sortByDate($event)">End Date   <i class="fas fa-sort" [ngClass]="{'fa-sort-down': sortedByDate , 'fa-sort-up': !sortedByDate}"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-2 mb-4">
+    <div class="col-3" *ngIf="showFilter">
+        <div class="accordion" id="collapseSearch">
+          <div class="card">
+            <div class="card-header" id="Date">
+              <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseDate" aria-expanded="true" aria-controls="collapseDate">
+                  Date
+                </button>
+              </h5>
+            </div>
+
+            <div id="collapseDate" class="collapse show" aria-labelledby="Date" data-parent="#collapseSearch">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="availabilityDate">Starting From:</label>
+                  <select class="form-control" id="availabilityDate" [(ngModel)]="availabilityDate" (change)="filterGreaterThan('availabilityDate', availabilityDate)" >
+                    <option disabled>chose ...</option>
+                    <option value="1">Today</option>
+                    <option value="2">Tomorrow</option>
+                    <option value="3">In 2 Days</option>
+                    <option value="4">In 3 Days</option>
+                    <option value="5">In 4 Days</option>
+                    <option value="6">In 5 Days</option>
+                    <option value="7">In A week</option>
+                 </select>
+                  <button *ngIf="availabilityDate" class="mt-1 btn btn-danger" (click)="removeFilter('availabilityDate')">Remove Filter</button>
+
+                </div>
+                <div class="form-group">
+                  <label for="endDate">Until:</label>
+                  <select class="form-control" id="endDate" [(ngModel)]="endDate" (change)="filterMinorThan('availabilityDate', endDate)">
+                    <option  disabled>chose ...</option>
+                    <option value="1">Today</option>
+                    <option value="2">Tomorrow</option>
+                    <option value="3">2 Days</option>
+                    <option value="4">3 Days</option>
+                    <option value="5">4 Days</option>
+                    <option value="6">5 Days</option>
+                    <option value="7">One week</option>
+                  </select>
+                  <button *ngIf="endDate" class="mt-1 btn btn-danger" (click)="removeFilter('endDate')">Remove Filter</button>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header" id="location">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseLocation" aria-expanded="false" aria-controls="collapseLocation">
+                    Location
+                </button>
+              </h5>
+            </div>
+            <div id="collapseLocation" class="collapse" aria-labelledby="location" data-parent="#collapseSearch">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="distance">Far Within:         <span class="font-weight-bold">{{distance}} KM</span></label>
+                  <input id="distance" type="range" class="custom-range" min="1" max="10" value="1" >
+                </div>
+
+                <label for="city">City</label><select id="city" class="form-control" name="city" >
+                  <option  disabled>chose...</option>
+                  <option *ngFor="let city of cities" [ngValue]="city">{{city}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header" id="jobReq">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseJob" aria-expanded="false" aria-controls="collapseJob">
+                  Categories
+                </button>
+              </h5>
+            </div>
+            <div id="collapseJob" class="collapse" aria-labelledby="jobReq" data-parent="#collapseSearch">
+              <div class="card-body">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="cpr" [(ngModel)]="CPR"  (change)="applyFilterCertificate('certificates','CPR', CPR)">
+                    <label class="custom-control-label" for="cpr">Clubs &amp; Community</label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="firstAid" [(ngModel)]="firstAid" (change)="applyFilterCertificate('certificates','firstAid', firstAid)">
+                    <label class="custom-control-label" for="firstAid">Creative Projects</label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="waterSafety" [(ngModel)]="waterSafety" (change)="applyFilterCertificate('certificates','waterSafety', waterSafety)">
+                    <label class="custom-control-label" for="waterSafety">Medical &amp; Health</label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="driver" [(ngModel)]="drivingLicence" (change)="applyFilterCertificate('certificates','drivingLicence', drivingLicence)">
+                    <label class="custom-control-label" for="driver">Pets &amp; Animals</label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="nutrition" [(ngModel)]="nutrition" (change)="applyFilterCertificate('certificates','nutrition', nutrition)">
+                    <label class="custom-control-label" for="nutrition">Sports &amp; Teams</label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="fitness" [(ngModel)]="fitnessEducation" (change)="applyFilterCertificate('certificates','fitnessEducation', fitnessEducation)">
+                    <label class="custom-control-label" for="fitness">Trips &amp; Adventures</label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="specialNeedCare" [(ngModel)]="specialNeedCare" (change)="applyFilterCertificate('certificates','specialNeedCare', specialNeedCare)">
+                    <label class="custom-control-label" for="specialNeedCare">Arts and crafts
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="container" [ngClass]="{'col-8 ml-auto' : showFilter , 'mx-auto w-75' : !showFilter }">
+      <div class="card-header shadow mb-3" style="background-color:  rgb(247, 247, 247); border-radius: 10px" *ngFor="let sitter of filteredSitters | sortBy: sortOrder:sortColumn;  let i = index">
+        <div class="row">
+          <div class="col-2" >
+            <img [src]="sitter.imageUrl" class="rounded-circle" style="width: 110px; height: 110px" width="100%" alt="sitterPicture">
+          </div>
+          <div class="col-7">
+            <h1 class="text-left" ><a class="text-dark" [routerLink]="'/viewprofile/fundraiser/'+sitter.id">{{sitter.firstName}} {{sitter.lastName}}</a> <span style="font-size:large "> Probability of success: <span style="font-size:x-large; color: green;">{{(sitter.firstName === 'Cloudisia')?'67%':((sitter.firstName === 'Chifco')? '42%':((sitter.firstName === 'Dabchy')? '42%':'87%'))}}</span></span></h1>
+            <small class="text-left">Date Limit: {{sitter.experienceYears}} / Location: {{sitter.city}}</small>
+            <p>{{sitter.aboutMe}}</p>
+          </div>
+          <div class="col-3 border-left ">
+            <div class="row h-100 w-100">
+            <div class="col-12 my-auto ml-4">
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" [style.width]="(sitter.firstName === 'Cloudisia')?'44%':((sitter.firstName === 'Chifco')? '38%':((sitter.firstName === 'Dabchy')? '77%':'67%'))" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100">
+                  {{(sitter.firstName === 'Cloudisia')?'44%':((sitter.firstName === 'Chifco')? '38%':((sitter.firstName === 'Dabchy')? '77%':'67%'))}}
+                </div>
+              </div>
+              <h4 ><span class="text-success font-weight-bold">{{(sitter.firstName === 'Cloudisia')?'44,000':((sitter.firstName === 'Chifco')? '19,000':((sitter.firstName === 'Dabchy')? '7,000':'6,700'))}}</span>/{{(sitter.firstName === 'Cloudisia')?'100,000':((sitter.firstName === 'Chifco')? '50,000':((sitter.firstName === 'Dabchy')? '9,000':'10,000'))}} DT</h4>
+              <h5>My Investment: <span class="text-danger">{{(sitter.firstName === 'Cloudisia')?'0':((sitter.firstName === 'Chifco')? '0':((sitter.firstName === 'Dabchy')? '0':'1,000'))}} DT</span></h5>
+              <button class="mt-3 btn btn-danger mx-auto" data-toggle="modal" data-target="#requestModal" id="RequestJobButton" name="RequestJobButton">Fund now</button>
+              <div class="modal fade" id="requestModal" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form [formGroup]="requestForm" >
+                        <div class="form-group">
+                          <label for="requestedDate">Chose A Date</label>
+                          <input type="date" id="requestedDate" class="form-control" formControlName="requestedDate">
+                        </div>
+                        <div class="form-group">
+                          <label for="requestedDuration">Job Duration</label>
+                          <input type="number" id="requestedDuration" class="form-control" min="1" max="7" [class.btn-outline-danger]="requestForm.controls.requestedDuration.invalid && changedRequest[0]" (change)="changedRequest[0]=true" formControlName="requestedDuration">
+                        </div>
+                        <div class="form-group">
+                          <label for="requestedLocation">Job Location</label>
+                          <select id="requestedLocation" class="form-control" [class.btn-outline-danger]="requestForm.controls.requestedLocation.invalid && changedRequest[1]" (change)="changedRequest[1]=true" formControlName="requestedLocation">
+                            <option value="sitterHouse" selected>Sitter's House</option>
+                            <option value="yourHouse">Your House</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="requestedChildrenNbr">Number Of Children</label>
+                          <input type="number" id="requestedChildrenNbr" class="form-control" min="1" max="5" [class.btn-outline-danger]="requestForm.controls.requestedChildrenNbr.invalid && changedRequest[2]" (change)="changedRequest[2]=true" formControlName="requestedChildrenNbr">
+                        </div>
+                        <div class="form-group">
+                          <label for="requestedNeedRegularJob">Are you Open For a Regular Job</label>
+                          <select id="requestedNeedRegularJob" class="form-control" [class.btn-outline-danger]="requestForm.controls.requestedNeedRegularJob.invalid && changedRequest[3]" (change)="changedRequest[3]=true" formControlName="requestedNeedRegularJob">
+                            <option value="false" selected>false</option>
+                            <option value="true">true</option>
+                          </select>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary" (click)="onSubmitRequest(requestForm.value, sitter.id)" data-dismiss="modal">Submit</button>
+                        </div>
+                      </form>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

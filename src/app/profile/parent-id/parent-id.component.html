@@ -1,0 +1,299 @@
+<div class="container bg-white w-100 p-3 mt-5 card-header " style="box-shadow: rgba(0, 0, 0, 0.75) 10px 10px 5px 0; ">
+  <div class="row">
+    <div class="col-3">
+      <div>
+      </div>
+    </div>
+  </div>
+
+  <ul class="nav nav-tabs mb-1" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active font-weight-bold text-info" data-toggle="tab" href="#AccountSettings">Account Settings</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link font-weight-bold text-info" data-toggle="tab" href="#Kids">Payment Method</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link font-weight-bold text-info" data-toggle="tab" href="#Messages">Notifications</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link font-weight-bold text-info" data-toggle="tab" href="#Favourite">My Investments</a>
+    </li>
+  </ul>
+
+  <!-- ================================= ACCOUNT SETTINGS CASE ==================================-->
+
+  <div class="tab-content">
+    <div id="AccountSettings" class="container tab-pane active" style="position: relative"><br>
+
+      <div class="text-center mb-2 " style="position: absolute; top: 10px ;right: 30px">
+        <img id="profileImage" [src]="url ? url : 'http://ssl.gstatic.com/accounts/ui/avatar_2x.png'" style="width: 150px; height: 150px" width="150px" height="150px" class="avatar rounded-circle img-thumbnail " alt="avatar" (click)="clickPic()">
+        <input type='file' id="imageUpload" name="profilePictureUpload" style="display: none" (change)="onUploadPicture( $event);">
+      </div>
+
+      <h1> <i class="fas fa-user-cog"></i> Modify my settings</h1>
+      <div class="col mt-4 ml-1">
+
+        <form [formGroup]="personalInfoForm" (ngSubmit)="onSavePI(personalInfoForm.value)">
+          <h3 class="text-info">Personal Information</h3>
+          <div class="form-group">
+            <label for="firstName">First Name:</label>
+            <input type="text" class="form-control" placeholder="Exp: Oussama ..." id="firstName" [class.btn-outline-danger]="personalInfoForm.controls.firstName.invalid && changedPI[0]" (change)="changedPI[0]=true" formControlName="firstName">
+            <div class="invalid-tooltip">
+              Please choose a unique and valid username.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name:</label>
+            <input type="text" class="form-control" id="lastName" placeholder="Exp: Ben Fredj .." [class.btn-outline-danger]="personalInfoForm.controls.lastName.invalid && changedPI[1]" (change)="changedPI[1]=true" formControlName="lastName">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email Address</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Exp: example@gmail.com" [class.btn-outline-danger]="personalInfoForm.controls.email.invalid && changedPI[2]" (change)="changedPI[2]=true" formControlName="email">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+          </div>
+          <div class="form-group">
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="text" class="form-control" id="phoneNumber" placeholder="Exp: 24772681 .." [class.btn-outline-danger]="personalInfoForm.controls.phoneNumber.invalid && changedPI[3]" (change)="changedPI[3]=true" formControlName="phoneNumber">
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1" (change)="checkBoxChange()">
+            <label class="form-check-label" for="exampleCheck1">Check me out </label>
+          </div>
+          <button type="submit" class="btn btn-info btn-md form-control " style="width: 150px" [disabled]="!checkBoxChecked">
+            <span [hidden]="savingPI">Save</span>
+            <span [hidden]="!savingPI" class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </span>
+          </button>
+        </form>
+        <div class="border mt-5 w-75" style="margin-left: 12.5%"></div>
+        <form class="mt-4" [formGroup]="newPasswordForm" (ngSubmit)="onSaveNP(newPasswordForm.value)">
+          <h3 class="text-info">New Password</h3>
+          <div class="form-group">
+            <label for="oldPassword">Your Old Password</label>
+            <input type="password" class="form-control" id="oldPassword" [class.btn-outline-danger]="newPasswordForm.controls.oldPassword.invalid && changedNP[0]" (change)="changedNP[0]=true" formControlName="oldPassword" >
+          </div>
+          <div class="form-group">
+            <label for="newPassword">Your New Password</label>
+            <input type="password" class="form-control" id="newPassword" [class.btn-outline-danger]="newPasswordForm.controls.newPassword.invalid && changedNP[1]" (change)="changedNP[1]=true" formControlName="newPassword" >
+          </div>
+          <div class="form-group">
+            <label for="confirmNewPassword">Confirm Your New Password</label>
+            <input type="password" class="form-control" id="confirmNewPassword" [class.btn-outline-danger]="newPasswordForm.controls.confirmNewPassword.invalid && changedNP[2]" (change)="changedNP[2]=true" formControlName="confirmNewPassword">
+          </div>
+          <button type="submit" class="btn btn-info btn-md form-control " style="width: 150px">
+            <span [hidden]="savingNP">Save</span>
+            <span [hidden]="!savingNP" class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </span>
+          </button>
+        </form>
+        <div class="border mt-5 w-75" style="margin-left: 12.5%"></div>
+        <form class="mt-4" [formGroup]="notificationForm" (ngSubmit)="onUpdateNotifications(notificationForm.value)">
+          <h3 class="text-info">Notifications</h3>
+          <div class="form-group col">
+            <div class="form-group" >
+              <label class="ml-n2" for="subscribeEmail">Subscribe  To NewsLetter:</label>
+              <div class="row">
+                <input  type="email" class="form-control" id="subscribeEmail" [disabled]="newsLetterChecked && parentProfile.notifications.emailSub.length > 0" aria-describedby="subEmail" placeholder="Exp: Example@gmail.com" style="width: 90%" [class.btn-outline-danger]="notificationForm.controls.emailSub.invalid && changedNotif" (change)="changedNotif=true" formControlName="emailSub">
+                <ui-switch  class="col-sm-1" color="#17a2b8" id="emailSubCheck" [disabled]="notificationForm.controls.emailSub.invalid" (click)="subscribeChange(notificationForm.value)" formControlName="emailSubCheck"></ui-switch>
+              </div>
+            </div>
+            <label class="ml-n2">Your email notifications</label>
+            <ul class="list-group ml-n3">
+              <li class="list-group-item font-weight-bold" style="height: 50px">live Sessions Dates <ui-switch class="col-sm-1" color="#17a2b8" style="float: right" [disabled]="!newsLetterChecked" (click)="favouriteSubmit.click()" formControlName="messagesReceived"></ui-switch></li>
+              <li class="list-group-item font-weight-bold" style="height: 50px">My Investments News <ui-switch class="col-sm-1" color="#17a2b8" style="float: right" [disabled]="!newsLetterChecked" (click)="favouriteSubmit.click()" formControlName="favsAvailability"></ui-switch></li>
+            </ul>
+
+          </div>
+          <button #favouriteSubmit type="submit" hidden></button>
+        </form>
+      </div>
+    </div>
+    <!-- ================================= END ACCOUNT SETTINGS CASE ==================================-->
+
+    <!-- ================================= MESSAGES CASE ==================================-->
+
+    <div id="Messages" class="container tab-pane fade"><br>
+      <h2 *ngIf="!parentProfile.messages.length" class="font-weight-bold text-center"> No Messages Have Been Found.</h2>
+      <div class="container card-header  mb-4 shadow" style="position:relative; border-radius: 10px" *ngFor="let message of parentProfile.messages; let i =index">
+        <button type="button" class="close" aria-label="Close" (click)="deleteMessage(i)">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="row">
+          <div class="col-1 my-auto">
+            <img [src]=' message.imageURL' width="70px " height="70px" class="rounded-circle m-auto" alt="profilePicture">
+          </div>
+
+          <div class="ml-2 mt-1 col-10">
+            <h5>Title: Project <span class="text-danger">THIKA</span> has Reached its 100% Goal.</h5>
+            <h5>Status : <span class="text-success">Finished</span></h5>
+            <h5>Date: 26/07/2020 </h5>
+          </div>
+        </div>
+        <a [routerLink]="'/viewprofile/fundraiser/'+message.idSender" style="position: absolute ; bottom: 10px ;right: 20px">View Details</a>
+      </div>
+    </div>
+    <!-- ================================= END MESSAGES CASE ==================================-->
+
+
+    <!-- ============================================== KIDS TABLE ===========================================-->
+    <div id="Kids" class="container tab-pane fade"><br>
+      <div class="row">
+        <form>
+          <div class="col-6 mx-auto">
+            <div class="col">
+              <div>
+                  <div>
+                    <img src="assets/img/carte%20zitouna.gif" alt="carte zitouna">
+                   <input type="radio"  class="custom-control-input">
+                  </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input">
+                  <label class="custom-control-label" style="margin-left: 80px"></label>
+                </div>
+              </div>
+              <div>
+                <div class="mt-3">
+                  <img src="assets/img/cartejeune.png" width="180" height="114" alt="carte zitouna">
+                  <input type="radio" name="options" class="custom-control-input">
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input">
+                  <label class="custom-control-label" style="margin-left: 80px"></label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="col-6 mx-auto">
+          <div class="card">
+            <div class="card-header">
+              Credit Card Credentials
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="text-info" for="cardName">credit card name</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fa fa-lock"></i>
+                  </span>
+                  </div>
+                  <input id="cardName"  type="text" class="form-control"  >
+
+                </div>
+              </div>
+
+              <div class="row mx-auto">
+                <div class="form-group col-xs-5 ">
+                  <label for="expiry_month" class="text-info" > Expiry Month</label>
+                  <input id="expiry_month" class="form-control input-group-lg reg_name" type="text" name="firstname"
+                         title="Enter first name"
+                         placeholder="MM"/>
+                </div>
+
+                <div class="form-group col-xs-5">
+                  <label for="expiry_year" class="text-info" >Expiry Year</label>
+                  <input id="expiry_year" class="form-control input-group-lg reg_name" type="text" name="lastname"
+                         title="Enter last name"
+                         placeholder="YY"/>
+                </div>
+              </div>
+
+              <button class="btn btn-success pull-right">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- ===================================== END KIDS TABLE =======================================-->
+
+    <!-- ===================================== FAVOURITES TABLE =======================================-->
+
+    <div id="Favourite" class="container tab-pane fade"><br>
+      <h2 class="font-weight-bold text-center" *ngIf="!parentProfile.favourites.length">No Favourites Have Been Found.</h2>
+      <div class=" bg-white mx-auto" >
+        <div class="card-header shadow mb-4 mx-auto" style="background-color: rgb(247, 247, 247); border-radius: 10px; width: 95%" *ngFor="let sitter of parentProfile.favourites;  let i = index">
+          <div class="row">
+            <div class="col-2" >
+              <img [src]="sitter.imageUrl" style="width: 150px; height: 150px" class="rounded-circle" width="100%" alt="sitterPicture">
+            </div>
+            <div class="col-7">
+              <h1 class="text-left"><a class="text-dark" [routerLink]="'/viewprofile/fundraiser/'+sitter.id">HackUP</a></h1>
+              <h5 class="text-left">Date Limit: 26/07/2021</h5>
+              <p>{{sitter.description}}</p>
+            </div>
+            <div class="col-3 border-left position-relative">
+              <div class="row h-100">
+                <div class="col-12 my-auto" >
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 67%;" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100">67%</div>
+                  </div>
+                  <h3 ><span class="text-success font-weight-bold">6,700 DT</span>/10,000 DT</h3>
+                  <h4>My Investment: <span class="text-danger"> 1,000</span></h4>
+                  <button class="mt-3 btn btn-danger mx-auto ml-4" data-toggle="modal" data-target="#requestModal">Fund Now</button>
+                  <div class="modal fade" id="requestModal" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalCenterTitle">Funding...</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form>
+
+                            <div class="form-group">
+                              <label for="requestedDuration">Amount (DT)</label>
+                              <input type="number" id="requestedDuration" class="form-control" min="100" max="10000"  value="100" >
+                            </div>
+                            <div class="form-group">
+                              <label for="requestedLocation">Funding type</label>
+                              <select id="requestedLocation" class="form-control" >
+                                <option value="sitterHouse" selected>Investment</option>
+                                <option value="yourHouse">Donation</option>
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <label for="requestedChildrenNbr">CARD PIN</label>
+                              <input type="number" id="requestedChildrenNbr" class="form-control" min="1" max="5" [class.btn-outline-danger]="requestForm.controls.requestedChildrenNbr.invalid && changedRequest[2]" (change)="changedRequest[2]=true" formControlName="requestedChildrenNbr">
+                            </div>
+                            <div class="form-group">
+
+                              <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"> - Are you sure?
+
+
+
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary" >Submit</button>
+                            </div>
+                          </form>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- ===================================== END FAVOURITES TABLE =======================================-->
+
+  </div>
+
+</div>
+

@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: 'Merienda_One';
+  font-style: normal;
+  src: url(assets/font/Merienda_One/MeriendaOne-Regular.ttf) format("opentype");
+}
+@font-face {
+  font-family: 'NovaCut';
+  font-style: normal;
+  src: url(assets/font/Nova_Cut/NovaCut-regular.ttf) format("opentype");
+}
+
+@font-face {
+  font-family: 'Alegreya-Bold';
+  font-style: normal;
+  src: url(assets/font/source-sans-pro/SourceSansPro-Light.otf) format("opentype");
+}
+html, body { height: 100%; }
+body { margin: 0;
+  font-family: 'Alegreya-Bold', sans-serif !important;}
+
+//@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';

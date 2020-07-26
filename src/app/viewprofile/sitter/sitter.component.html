@@ -1,0 +1,207 @@
+<div class="container bg-white w-100 p-3 mt-5 card-header "  style="box-shadow: rgba(0, 0, 0, 0.75) 10px 10px 5px 0; ">
+
+  <ul class="nav nav-tabs mb-1" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active font-weight-bold text-info" data-toggle="tab" href="#profile">profile</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link font-weight-bold text-info" data-toggle="tab" href="#Reviews">Investors Rating</a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+
+
+    <!-- ========================================== PROFILE CASE =========================================-->
+
+    <div id="profile" class="container tab-pane active"><br>
+      <div class="row">
+        <div class="col-3 text-center">
+          <img [src]="profileImage" width="247px" height="247px" alt="profilePicture" class="mx-auto">
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: 67%;" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100">67%</div>
+          </div>
+          <h3 ><span class="text-success font-weight-bold">6,700 DT</span>/10,000 DT</h3>
+          <h4>My Investment: <span class="text-danger"> 1,000</span></h4>
+          <button class="btn btn-info form-control mx-auto mt-2" *ngIf="authService.isParent" data-toggle="modal" data-target="#requestModal" id="RequestJobButton" name="RequestJobButton">Fund Now</button>
+          <div class="modal fade" id="requestModal" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalCenterTitle">Finding...</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+
+                    <div class="form-group">
+                      <label for="requestedDuration">Amount (DT)</label>
+                      <input type="number" id="requestedDuration" class="form-control" min="100" max="10000"  value="100" >
+                    </div>
+                    <div class="form-group">
+                      <label for="requestedLocation">Funding type</label>
+                      <select id="requestedLocation" class="form-control" >
+                        <option value="sitterHouse" selected>Investment</option>
+                        <option value="yourHouse">Donation</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="requestedChildrenNbr">CARD PIN</label>
+                      <input type="number" id="requestedChildrenNbr" class="form-control" min="1" max="5" >
+                    </div>
+                    <div class="form-group">
+
+                      <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"> - Are you sure?
+
+
+
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary" >Submit</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-9" [hidden]="!pageReady" >
+          <a class="text-danger float-right" style="font-size: 25px"> <i class="fas fa-flag"> Report Profile</i></a>
+          <div id="profileDetails" style="height: 230px">
+            <h1 class="mb-n2">{{sitterProfile.firstName}} {{sitterProfile.lastName}}                         <i *ngIf="authService.isParent" class=" fa-star text-info" [ngClass]="{far: !addedToFavourites, fa : addedToFavourites }" (click)="addToFavourites()"></i><a class="text-info" [routerLink]="'/profile/investor/'+authService.userId" style="font-size: 20px" *ngIf="addedToFavourites">See In Favourites</a> </h1>
+            <h5><br><span class="font-weight-bold">Location:</span> {{sitterProfile.city}}<br><span class="font-weight-bold">campaign Start Date:</span> {{sitterProfile.experienceYears}}<br><span class="font-weight-bold">website: </span><a href="https://www.facebook.com/hackupio/">www.facebook.com/hackupio</a><br><span class="font-weight-bold">Field: </span>IT/Technology</h5>
+          </div>
+          <div class="border mb-3 mt-n5"></div>
+          <div id="aboutMe">
+            <h2 class="font-weight-bold">About The Project</h2>
+            <span id="aboutMeText">{{sitterProfile.aboutMe}}</span>
+            <h4 class="mt-3 font-weight-bold" *ngIf="sitterProfile.certificates.length">Project Plan:</h4>
+            <button class="btn btn-dark">Download business plan </button>
+          </div>
+          <div class="border mb-3 mt-4"></div>
+          <div id="jobInfo" class="mb-5">
+            <h2 class="mt-2 mb-3 font-weight-bold">AI prediction</h2>
+            <h4><span class="font-weight-bold">Probability of Success:</span><span style="font-size: xx-large" class="text-success font-weight-bold"> 87%</span></h4>
+          </div>
+        </div>
+        <span [hidden]="pageReady" class="spinner-border text-center " role="status">
+              <span class="sr-only">Loading...</span>
+      </span>
+      </div>
+    </div>
+
+    <!-- ========================================== END PROFILE CASE =========================================-->
+
+
+
+    <!-- ========================================== REVIEW CASE =========================================-->
+
+
+    <div id="Reviews" class="container tab-pane fade"><br>
+      <h2 class="text-center font-weight-bold">Live Stream of the founder of {{sitterProfile.firstName}} {{sitterProfile.lastName}}</h2>
+      <h3 class="text-center" *ngIf="!sitterProfile.reviews.length">No reviews Have Been Found.</h3>
+      <div style="margin-left: 20%" class="mb-4">
+        <video height="400" controls >
+          <source src="./assets/videos/vid.mp4" type="video/mp4">
+        </video>
+      </div>
+
+
+      <div class="row" *ngIf="sitterProfile.reviews.length">
+        <div class="text-center col-4 ">
+          <h1 style="font-size: 70px">{{sitterProfile.avgRate}}</h1>
+          <p>out of 5</p>
+          <p><i class="fas fa-user pr-1"></i>{{sitterProfile.reviews.length}} total</p>
+          <div class="text-center mb-2">
+            <span class="fa fa-star mx-1 text-info"> </span>
+            <span class="fa-star mx-1 text-info" [ngClass]="{'fa': sitterProfile.avgRate > 1, 'far': sitterProfile.avgRate === 1}"></span>
+            <span class="fa-star mx-1 text-info" [ngClass]="{'fa': sitterProfile.avgRate > 2, 'far': sitterProfile.avgRate <= 2}"></span>
+            <span class="fa-star mx-1 text-info" [ngClass]="{'fa': sitterProfile.avgRate > 3, 'far': sitterProfile.avgRate <= 3}"></span>
+            <span class="fa-star mx-1 text-info" [ngClass]="{'fa': sitterProfile.avgRate > 4, 'far': sitterProfile.avgRate <= 4}"></span>
+          </div>
+        </div>
+
+        <div class="col-8">
+          <div class="row mt-2 ">
+            <p class=" mt-n1 mr-2">5</p>
+            <div class="progress " style="width: 82%" >
+              <div class="progress-bar" role="progressbar" [style.width]="(sitterProfile.starCounts[4] / sitterProfile.reviews.length)* 100 + '%'" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </div>
+          <div class="row mt-2 ">
+            <p class=" mt-n1 mr-2">4</p>
+            <div class="progress " style="width: 82%">
+              <div class="progress-bar bg-info" role="progressbar" [style.width]="(sitterProfile.starCounts[3] / sitterProfile.reviews.length)* 100 + '%'" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </div>
+          <div class="row mt-2 ">
+            <p class=" mt-n1 mr-2">3</p>
+            <div class="progress " style="width: 82%">
+              <div class="progress-bar bg-success" role="progressbar" [style.width]="(sitterProfile.starCounts[2] / sitterProfile.reviews.length)* 100 +'%'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </div>
+          <div class="row mt-2 ">
+            <p class=" mt-n1 mr-2">2</p>
+            <div class="progress " style="width: 82%">
+              <div class="progress-bar bg-warning" role="progressbar" [style.width]="(sitterProfile.starCounts[1] / sitterProfile.reviews.length)* 100 + '%'" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <p class=" mt-n1 mr-2">1</p>
+            <div class="progress " style="width: 82%">
+              <div class="progress-bar bg-danger" role="progressbar" [style.width]="(sitterProfile.starCounts[0] / sitterProfile.reviews.length)* 100 + '%'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="mx-auto row mt-3 p-2 bg-light mb-2" style="width: 870px; position:relative ;border: 1px solid #EAEAEA; border-radius: 2px" *ngFor="let rating of sitterProfile.reviews ; let i= index">
+        <div class="col-2 position-relative ">
+          <img class="rounded-circle position-relative top" [src]="rating.imageURL" style="width: 70px; height: 70px" width="70px" height="70px" alt="reviewerPicture">
+          <a [routerLink]="'/viewProfile/investor/'+rating.idRev" style="text-underline: none; color: black" class="text-center">{{rating.firstNameRev}}</a>
+          <div class="mb-2 ml-n2" style="width: 90px ;font-size: 9px">
+            <i class="fa-star mx-1 text-info" [ngClass]="{'fa': +rating.review > 0, 'far': +rating.review <= 0}"></i>
+            <i class="fa-star mx-1 text-info" [ngClass]="{'fa': +rating.review > 1, 'far': +rating.review <= 1}"></i>
+            <i class="fa-star mx-1 text-info" [ngClass]="{'fa': +rating.review > 2, 'far': +rating.review <= 2}"></i>
+            <i class="fa-star mx-1 text-info" [ngClass]="{'fa': +rating.review > 3, 'far': +rating.review <= 3}"></i>
+            <i class="fa-star mx-1 text-info" [ngClass]="{'fa': +rating.review > 4, 'far': +rating.review <= 4}"></i>
+          </div>
+          <p>{{rating.reviewDate}}</p>
+        </div>
+        <div class="col-10 text-left pl-4 pt-2">
+          {{rating.reviewText}}
+        </div>
+
+      </div>
+
+      <div class="bg-light mx-auto " style="width: 870px; height: 148px ;position:relative ;border: 1px solid #EAEAEA; border-radius: 2px" *ngIf="visibilityRatingForm">
+        <form class="p-2" [formGroup]="reviewForm" (ngSubmit)="onSubmitReview(reviewForm.value)" >
+          <textarea class="form-control mb-1" id="reviewText" name="reviewText" placeholder="Enter your review here..." [class.btn-outline-danger]="reviewForm.controls.reviewText.invalid && changedReview" (change)="changedReview=true" formControlName="reviewText"></textarea>
+          <div>
+            <i class="fa-star text-info" [ngClass]="{far: !star1 , fa: star1}" (click)="star1Click()"></i>
+            <i class="fa-star text-info" [ngClass]="{far: !star2 , fa: star2}" (click)="star2Click()"></i>
+            <i class="fa-star text-info" [ngClass]="{far: !star3 , fa: star3}" (click)="star3Click()"></i>
+            <i class="fa-star text-info" [ngClass]="{far: !star4 , fa: star4}" (click)="star4Click()"></i>
+            <i class="fa-star text-info" [ngClass]="{far: !star5 , fa: star5}" (click)="star5Click()"></i>
+
+          </div>
+          <div class="form-group float-right">
+            <button type="submit" name="submitReview" id="submitReview" class="btn btn-success">Submit</button>
+          </div>
+        </form>
+      </div>
+
+
+    </div>
+
+    <!-- ========================================== END REVIEWS CASE =========================================-->
+
+
+  </div>
+</div>

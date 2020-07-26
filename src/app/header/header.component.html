@@ -1,0 +1,65 @@
+
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top  " style="background-color: black; border-bottom: solid 1px black ;opacity: 0.7 ">
+  <a href="#"><img src="assets/img/logo.png" height="45x" alt="Bambino"></a>
+
+
+  <div class="navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto ">
+      <!--================================ HOME BUTTON ================================ -->
+      <li class="nav-item " routerLinkActive="active" *ngIf="!authService.isLoggedIn">
+        <a class="nav-link" routerLink="home"><span class="stlbutton">Home</span> <span class="sr-only">(current)</span></a>
+      </li>
+      <!--================================END HOME BUTTON ================================ -->
+
+      <!--================================ SEARCH BUTTON ================================ -->
+
+      <li class="nav-item " routerLinkActive="active" *ngIf="authService.isLoggedIn && authService.isParent">
+        <a class="nav-link"  routerLink="search"><span class="stlbutton">Search For Fundraisers</span></a>
+      </li>
+      <!--================================ END SEARCH BUTTON ================================ -->
+
+
+      <!--================================ CONTACT BUTTON ================================ -->
+
+      <li class="nav-item " routerLinkActive="active">
+        <a class="nav-link" routerLink="contact"><span class="stlbutton">Contact</span></a>
+      </li>
+      <!--================================ END NEWS BUTTON ================================ -->
+
+
+    </ul>
+    <!--================================ SIGNIN BUTTON ================================ -->
+
+    <div class="nav-item my-lg-1 mr-3 " style="margin-right: 10px" *ngIf="!authService.isLoggedIn">
+      <a class="btn btn-sm btn-outline-secondary btn-outline-info "  routerLinkActive="active" routerLink="auth/signIn" role="button" >SignIn</a>
+    </div>
+    <!--================================ END SIGNIN BUTTON ================================ -->
+
+
+
+    <!--================================ SEARCH BAR ================================ -->
+
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <!--================================ END SEARCH BAR ================================ -->
+
+    <!--================================ MENU DROPDOWN ================================ -->
+    <div class="btn-group ml-4" *ngIf="authService.isLoggedIn">
+      <button type="button" class="btn" style="background-color: black" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-bars text-white "></i>
+      </button>
+      <div class="dropdown-menu dropdown-menu-right">
+        <button class="dropdown-item" type="button" (click)="onMyAccount()">My Account</button>
+        <button class="dropdown-item" type="button" id="logOutButton" (click)="logout()">Log Out</button>
+      </div>
+    </div>
+
+    <!--================================ END MENU DROPDOWN ================================ -->
+
+  </div>
+</nav>
+
+
